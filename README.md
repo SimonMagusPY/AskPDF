@@ -9,10 +9,7 @@ This is a Python application that allows users to ask questions about PDF docume
 - Langchain
 ### Installation
 1. Clone the repository
-   <pre><code>git clone https://github.com/your-username/ask-your-pdf.git
-</code></pre>
-    
-
+   <pre><code>git clone https://github.com/your-username/ask-your-pdf.git</code></pre>
    
 2. Install the required packages:
-    pip install -r requirements.txt
+    <pre><code>pip install -r requirements.txt</code></pre>
