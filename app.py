@@ -1,3 +1,14 @@
+"""
+This is a Streamlit app that allows users to upload a PDF file and ask a question
+about its content. The app uses the PyPDF2 library to extract text from the PDF file,
+and then uses OpenAI embeddings to create a knowledge base of the text. Users can then
+ask a question about the text, and the app uses a question-answering chain to find
+the most relevant answer from the knowledge base.
+
+To run the app, simply run this script in a Python environment with the required
+dependencies installed, and then navigate to the local URL provided by Streamlit.
+"""
+
 from dotenv import load_dotenv
 import os
 import streamlit as st
