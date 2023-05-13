@@ -20,55 +20,75 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 
-def main(): 
+def upload_pdf():
+    pdf = st.file_uploader("Upload you PDF", type='pdf')
+    return pdf
+
+def extract_text(pdf):
+    pdf_reader = PdfReader(pdf)
+    text = ""
+    for page in pdf_reader.pages:
+        text += page.extract_text()
+    return text
+
+def split_text(text):
+    text_splitter = CharacterTextSplitter(
+        separator="\n",
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len
+    )
+    chunks = text_splitter.split_text(text)
+    return chunks
+
+def create_embeddings(chunks):
+    embeddings = OpenAIEmbeddings()
+    knowledge_base = FAISS.from_texts(chunks, embeddings)
+    return knowledge_base
+
+def get_docs(knowledge_base, user_question):
+    docs = None
+    if user_question:
+        docs = knowledge_base.similarity_search(user_question)
+    return docs
+
+def get_response(docs, user_question):
+    if docs:
+        llm = OpenAI()
+        chain = load_qa_chain(llm, chain_type="stuff")
+        with get_openai_callback() as cb:
+            response = chain.run(input_documents=docs, question=user_question)
+            print(cb)
+        return response
+    else:
+        return "Please enter a question to get an answer."
+
+def main():
     load_dotenv()
     st.set_page_config(page_title="Ask Your PDF")
     st.header("Ask your PDF 💬")
-    
+
     #upload the file
-    pdf = st.file_uploader("Upload you PDF", type='pdf')  
+    pdf = upload_pdf()
+
     #extract the text
     if pdf is not None:
-        pdf_reader = PdfReader(pdf)
-        text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text()
+        text = extract_text(pdf)
+
         #split into chunks
-        text_splitter = CharacterTextSplitter(
-            separator="\n",
-            chunk_size=1000,
-            chunk_overlap=200,
-            length_function=len
-        )
-        chunks = text_splitter.split_text(text)
+        chunks = split_text(text)
 
         #create embeddings
-        embeddings = OpenAIEmbeddings()
-        knowledge_base = FAISS.from_texts(chunks, embeddings)
-        
-        #initialize docs to None
-        docs = None 
+        knowledge_base = create_embeddings(chunks)
+
         #show user input for question
         user_question = st.text_input("Ask a question about your PDF:")
-    
-        if user_question:
-            docs = knowledge_base.similarity_search(user_question)
-        
-        if docs:
 
-            llm = OpenAI()    
-            chain = load_qa_chain(llm, chain_type="stuff")     
+        docs = get_docs(knowledge_base, user_question)
 
-            with get_openai_callback() as cb:
-                response = chain.run(input_documents=docs, question=user_question)
-                print(cb)            
+        response = get_response(docs, user_question)
 
-            st.write(response)
-        else:
-            st.write("Please enter a question to get an answer.")        
-
-
-
+        st.write(response)
 
 if __name__ == '__main__':
     main()
