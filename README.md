@@ -1,6 +1,9 @@
 # Ask Your PDF
 This is a Python application that allows users to ask questions about PDF documents and get answers using OpenAI.
 
+### NB 
+Current implementation is using text-davinci-003 ( next iteration will be using chat-gpt API , reducing cost.
+
 ## Getting Started
 ### Prerequisites
 - Python 3.7 or later
