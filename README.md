@@ -13,3 +13,16 @@ This is a Python application that allows users to ask questions about PDF docume
    
 2. Install the required packages:
     <pre><code>pip install -r requirements.txt</code></pre>
+    
+### Usage
+1. Run the app:
+   <pre><code>streamlit run app.py</code></pre>
+2. Upload a PDF file.
+3. Ask a question about the PDF document.
+4. Get the answer from the OpenAI model.
+
+## Contributing
+Contributions are welcome! If you have any suggestions or find any bugs, please open an issue or submit a pull request.
+
+##License
+This project is licensed under the MIT License - see the LICENSE file for details.
