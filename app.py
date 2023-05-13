@@ -18,6 +18,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
+from langchain.callbacks import get_openai_callback
 
 def main(): 
     load_dotenv()
@@ -56,9 +57,11 @@ def main():
         if docs:
 
             llm = OpenAI()    
-            chain = load_qa_chain(llm, chain_type="stuff")      
+            chain = load_qa_chain(llm, chain_type="stuff")     
 
-            response = chain.run(input_documents=docs, question=user_question)            
+            with get_openai_callback() as cb:
+                response = chain.run(input_documents=docs, question=user_question)
+                print(cb)            
 
             st.write(response)
         else:
