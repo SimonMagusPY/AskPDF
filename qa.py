@@ -5,14 +5,14 @@ The function takes a knowledge base and a question as input and returns an answe
 """
 
 from langchain.chains.question_answering import load_qa_chain
-from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
 import streamlit as st
 
 def get_answer(chunks, question):
     docs = chunks.similarity_search(question)
     
-    llm = OpenAI(model_name="text-curie-001")
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo")
 
     chain = load_qa_chain(llm, chain_type="stuff")
 
