@@ -18,14 +18,14 @@ def main():
     st.header("Ask your PDF 💬")
     
     # Upload the file
-    pdf = st.file_uploader("Upload your PDF", type='pdf')
+    pdf = st.file_uploader("Upload your PDF", type=['pdf', 'txt'])
     
     # Extract the text into chunks
     if pdf is not None:
         chunks = extract_chunks(pdf)
         
         # Show user input for question
-        user_question = st.text_input("Ask a question about your PDF:")
+        user_question = st.text_input("Ask a question about your document:")
         
         # Get answer using OpenAI
         if user_question:

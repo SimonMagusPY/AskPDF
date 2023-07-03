@@ -13,7 +13,7 @@ from langchain.schema import (
 )
 
 def get_answer(chunks, question):       
-
+    docs = chunks.similarity_search(question)
     human_message_prompt = HumanMessagePromptTemplate(
             prompt=PromptTemplate(
                 template="You",
@@ -21,8 +21,9 @@ def get_answer(chunks, question):
             )
         )
     chat_prompt_template = ChatPromptTemplate.from_messages([human_message_prompt])
-    chat = ChatOpenAI(temperature=0)
-    chain = LLMChain(llm=chat, prompt=chat_prompt_template)
+    llm = ChatOpenAI(temperature=0)
+
+    chain = LLMChain(llm=llm, prompt=chat_prompt_template)
     print(chain.run("colorful socks"))
 
 

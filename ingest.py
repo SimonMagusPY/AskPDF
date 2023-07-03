@@ -31,7 +31,7 @@ def extract_chunks(pdf):
     #Split text into chunks
     text_splitter = CharacterTextSplitter(
         separator="\n",
-        chunk_size=2000,
+        chunk_size=1000,
         chunk_overlap=100,
         length_function=len
     )
